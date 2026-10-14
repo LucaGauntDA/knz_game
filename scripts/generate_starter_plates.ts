@@ -299,9 +299,10 @@ function generateSvg(p: PlateConfig): string {
 }
 
 async function buildDataset() {
+  const root = process.cwd();
   const targets = [
-    path.resolve('/public/kennzeichen_game'),
-    path.resolve('/kennzeichen_game'),
+    path.resolve(root, 'public', 'kennzeichen_game'),
+    path.resolve(root, 'kennzeichen_game'),
   ];
 
   for (const target of targets) {

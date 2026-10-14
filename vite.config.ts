@@ -21,6 +21,18 @@ export default defineConfig(() => {
 
               const targetFile = fs.existsSync(rootPath) ? rootPath : fs.existsSync(publicPath) ? publicPath : null;
 
+              if (req.url === '/kennzeichen_game/manifest.json') {
+                try {
+                  const { scanDirectories } = require('./scripts/scan_kennzeichen');
+                  const manifest = scanDirectories();
+                  res.setHeader('Content-Type', 'application/json');
+                  res.end(JSON.stringify(manifest, null, 2));
+                  return;
+                } catch (e) {
+                  // fallback to static file if error
+                }
+              }
+
               if (targetFile && fs.statSync(targetFile).isFile()) {
                 res.setHeader('Content-Type', targetFile.endsWith('.json') ? 'application/json' : 'image/jpeg');
                 fs.createReadStream(targetFile).pipe(res);
