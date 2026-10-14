@@ -1,0 +1,7 @@
+{
+  "name": "Kennzeichen-Quiz",
+  "description": "Minimalistisches, iPad-optimiertes Kennzeichen-Quiz im Dark Mode mit mehrstufigen Unblur-Stufen und Touch-Interaktion.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
