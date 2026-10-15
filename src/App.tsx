@@ -1,10 +1,4 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { AnimatePresence } from 'motion/react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   PlateManifestEntry,
   PlateStage,
@@ -14,16 +8,42 @@ import {
   calculateRoundScore,
   loadPlatesManifest,
 } from './data/platesManifest';
-import { COUNTRIES, COUNTRY_BY_OVAL } from './data/countries';
-import { GameMode, RoundResult, RoundState } from './types/game';
-import { soundFx } from './utils/audio';
-import { TopBar } from './components/TopBar';
+import { COUNTRIES } from './data/countries';
 import { LicensePlateDisplay } from './components/LicensePlateDisplay';
 import { FlagGrid } from './components/FlagGrid';
-import { SuccessOverlay } from './components/SuccessOverlay';
-import { LostRoundOverlay } from './components/LostRoundOverlay';
 import { SummaryScreen } from './components/SummaryScreen';
-import { RulesModal } from './components/RulesModal';
+import { soundFx } from './utils/audio';
+
+export type GameMode = 'standard' | 'endless';
+
+export interface RoundState {
+  roundNumber: number;
+  plate: PlateManifestEntry;
+  currentStage: PlateStage;
+  secretLimit: number;
+  attemptsCount: number;
+  wrongGuesses: string[];
+  hintsCount: number;
+  stepsTaken: number;
+  isLocked: boolean;
+  resolutionStatus: 'playing' | 'won' | 'lost';
+  selectedWinningOval: string | null;
+  displayFlags: string[];
+}
+
+export interface RoundResult {
+  roundNumber: number;
+  plate: PlateManifestEntry;
+  correctOval: string;
+  countryName: string;
+  isWon: boolean;
+  score: number;
+  attemptsCount: number;
+  hintsUsed: number;
+  wrongGuessesCount: number;
+  finalStage: PlateStage;
+  firstAttemptSuccess: boolean;
+}
 
 function shuffleArray<T>(array: T[]): T[] {
   const arr = [...array];
@@ -35,15 +55,13 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export default function App() {
-  const [allPlates, setAllPlates] = useState<PlateManifestEntry[]>(BUILTIN_PLATES);
+  const [, setAllPlates] = useState<PlateManifestEntry[]>(BUILTIN_PLATES);
   const [mode, setMode] = useState<GameMode>('standard');
   const [platesQueue, setPlatesQueue] = useState<PlateManifestEntry[]>([]);
   const [currentRoundIndex, setCurrentRoundIndex] = useState<number>(0);
   const [roundState, setRoundState] = useState<RoundState | null>(null);
   const [roundHistory, setRoundHistory] = useState<RoundResult[]>([]);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
-  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
-  const [showRules, setShowRules] = useState<boolean>(false);
 
   const platesRef = useRef<PlateManifestEntry[]>(BUILTIN_PLATES);
   const modeRef = useRef<GameMode>(mode);
@@ -88,6 +106,28 @@ export default function App() {
     });
   }, []);
 
+  // Advance to next round or end game
+  const handleNextRound = useCallback(
+    (queue: PlateManifestEntry[] = platesQueue, currentIndex: number = currentRoundIndex) => {
+      const nextIndex = currentIndex + 1;
+      if (nextIndex >= queue.length) {
+        // Completed all rounds
+        soundFx.playComplete();
+        setIsGameOver(true);
+        setRoundState(null);
+      } else {
+        setCurrentRoundIndex(nextIndex);
+        setupRound(queue[nextIndex], nextIndex + 1);
+
+        // Preload the following plate
+        if (nextIndex + 1 < queue.length) {
+          preloadPlateImages(queue[nextIndex + 1]);
+        }
+      }
+    },
+    [platesQueue, currentRoundIndex, preloadPlateImages, setupRound]
+  );
+
   // Initialize a new game session with shuffled plates
   const initGame = useCallback(
     (targetMode?: GameMode, sourcePlates?: PlateManifestEntry[]) => {
@@ -102,7 +142,6 @@ export default function App() {
       setIsGameOver(false);
 
       if (queue.length > 0) {
-        // Preload first 2 plates
         preloadPlateImages(queue[0]);
         if (queue.length > 1) {
           preloadPlateImages(queue[1]);
@@ -142,8 +181,18 @@ export default function App() {
     const isCorrect = selectedOval === plate.oval;
 
     if (isCorrect) {
-      // Correct flag chosen!
+      // 1. Play success sound
       soundFx.playSuccess();
+
+      // 2. Send haptic signal (Vibration auf iOS / Android Geräten)
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+        try {
+          navigator.vibrate([35, 45, 35]);
+        } catch {
+          // ignore if vibration is not permitted
+        }
+      }
+
       const firstAttempt = attemptsCount === 0;
       const score = calculateRoundScore(stepsTaken, false);
 
@@ -157,24 +206,42 @@ export default function App() {
         attemptsCount,
         hintsUsed: hintsCount,
         wrongGuessesCount: wrongGuesses.length,
-        finalStage: currentStage,
+        finalStage: 'solution',
         firstAttemptSuccess: firstAttempt,
       };
 
       setRoundHistory((prev) => [...prev, result]);
+
+      // 3. Bei richtig: SOFORT DIE SOLUTION ANZEIGEN & KEIN POP-UP
       setRoundState((prev) =>
         prev
           ? {
               ...prev,
               isLocked: true,
+              currentStage: 'solution', // Zeigt direkt die Lösung
               resolutionStatus: 'won',
               selectedWinningOval: selectedOval,
             }
           : null
       );
+
+      // Nach 1,2 Sekunden Betrachtung der Lösung nahtlos zur nächsten Runde wechseln
+      setTimeout(() => {
+        handleNextRound();
+      }, 1250);
     } else {
       // Wrong flag chosen
       soundFx.playError();
+
+      // Haptisches Signal bei Fehler
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+        try {
+          navigator.vibrate(60);
+        } catch {
+          // ignore
+        }
+      }
+
       const nextAttempts = attemptsCount + 1;
       const updatedWrong = [...wrongGuesses, selectedOval];
 
@@ -204,10 +271,16 @@ export default function App() {
                 isLocked: true,
                 attemptsCount: nextAttempts,
                 wrongGuesses: updatedWrong,
+                currentStage: 'solution', // Zeigt Lösung bei Rundenverlust
                 resolutionStatus: 'lost',
               }
             : null
         );
+
+        // Nach 1,6 Sekunden zur nächsten Runde
+        setTimeout(() => {
+          handleNextRound();
+        }, 1600);
       } else {
         // Step to next easier available stage
         const nextStage = getNextEasierStage(plate, currentStage);
@@ -226,7 +299,7 @@ export default function App() {
     }
   };
 
-  // Handle ❓ Hint click
+  // Handle ❓ Hint click in cell 16
   const handleHint = () => {
     if (!roundState || roundState.isLocked || roundState.resolutionStatus !== 'playing') {
       return;
@@ -236,6 +309,15 @@ export default function App() {
       roundState;
     const nextAttempts = attemptsCount + 1;
     const nextHints = hintsCount + 1;
+
+    // Haptischer Klick
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+      try {
+        navigator.vibrate(25);
+      } catch {
+        // ignore
+      }
+    }
 
     // Check secret threshold
     if (nextAttempts >= secretLimit) {
@@ -262,10 +344,15 @@ export default function App() {
               isLocked: true,
               attemptsCount: nextAttempts,
               hintsCount: nextHints,
+              currentStage: 'solution',
               resolutionStatus: 'lost',
             }
           : null
       );
+
+      setTimeout(() => {
+        handleNextRound();
+      }, 1600);
       return;
     }
 
@@ -284,57 +371,16 @@ export default function App() {
     );
   };
 
-  // Advance to next round or end game
-  const handleNextRound = () => {
-    const nextIndex = currentRoundIndex + 1;
-    if (nextIndex >= platesQueue.length) {
-      // Completed all rounds
-      soundFx.playComplete();
-      setIsGameOver(true);
-      setRoundState(null);
-    } else {
-      setCurrentRoundIndex(nextIndex);
-      setupRound(platesQueue[nextIndex], nextIndex + 1);
-
-      // Preload the following plate
-      if (nextIndex + 1 < platesQueue.length) {
-        preloadPlateImages(platesQueue[nextIndex + 1]);
-      }
-    }
-  };
-
-  // Sound toggle
-  const handleToggleSound = () => {
-    const nextState = !soundEnabled;
-    setSoundEnabled(nextState);
-    soundFx.enabled = nextState;
-  };
-
-  // Switch game mode
   const handleToggleMode = () => {
     const nextMode = mode === 'standard' ? 'endless' : 'standard';
     setMode(nextMode);
     initGame(nextMode);
   };
 
-  const totalRounds = mode === 'standard' ? Math.min(10, platesQueue.length) : platesQueue.length;
-
   return (
-    <div className="w-full h-dvh bg-[#0a0c10] text-slate-100 flex flex-col justify-between overflow-hidden antialiased font-sans">
-      {/* Top Header */}
-      <TopBar
-        currentRound={currentRoundIndex + 1}
-        totalRounds={totalRounds}
-        mode={mode}
-        soundEnabled={soundEnabled}
-        onToggleSound={handleToggleSound}
-        onRestart={() => initGame(mode)}
-        onToggleMode={handleToggleMode}
-        onShowHelp={() => setShowRules(true)}
-      />
-
-      {/* Main Game Screen */}
-      <main className="flex-1 w-full flex flex-col items-center justify-between min-h-0 py-1 sm:py-2 px-2 sm:px-4">
+    <div className="w-full h-dvh bg-[#0a0c10] text-slate-100 flex flex-col justify-between overflow-hidden antialiased font-sans select-none">
+      {/* Keine obere Leiste: Bildschirmhöhe 100% für Kennzeichen & Flaggen */}
+      <main className="flex-1 w-full flex flex-col items-center justify-between min-h-0 py-2 sm:py-4 px-2 sm:px-4">
         {isGameOver ? (
           <SummaryScreen
             mode={mode}
@@ -344,17 +390,19 @@ export default function App() {
           />
         ) : roundState ? (
           <div className="w-full h-full flex flex-col items-center justify-between max-w-4xl mx-auto">
-            {/* Upper screen half: license plate as large as possible, undistorted */}
-            <div className="w-full flex-1 flex items-center justify-center min-h-[140px] max-h-[38vh]">
+            {/* Oberer Bildschirmbereich: Kennzeichen ohne künstliche Ränder oder Boxen */}
+            <div className="w-full flex-1 flex items-center justify-center min-h-[160px] max-h-[46vh]">
               <LicensePlateDisplay
                 plate={roundState.plate}
                 currentStage={roundState.currentStage}
-                isRevealingSolution={roundState.resolutionStatus === 'lost'}
+                isRevealingSolution={
+                  roundState.resolutionStatus === 'won' || roundState.resolutionStatus === 'lost'
+                }
               />
             </div>
 
-            {/* Lower screen half: 16 flags in 4 rows, matching plate width */}
-            <div className="w-full pb-1 sm:pb-3 flex flex-col justify-end">
+            {/* Unterer Bildschirmbereich: 15 Flaggen + ❓ Emoji in 4x4 ohne Boxen */}
+            <div className="w-full pb-2 sm:pb-6 flex flex-col justify-end">
               <FlagGrid
                 flags={roundState.displayFlags}
                 correctOval={roundState.plate.oval}
@@ -373,23 +421,6 @@ export default function App() {
           </div>
         )}
       </main>
-
-      {/* Overlays */}
-      <AnimatePresence>
-        {roundState && roundState.resolutionStatus === 'won' && (
-          <SuccessOverlay
-            oval={roundState.plate.oval}
-            onNextRound={handleNextRound}
-            isFirstAttempt={roundState.attemptsCount === 0}
-          />
-        )}
-
-        {roundState && roundState.resolutionStatus === 'lost' && (
-          <LostRoundOverlay plate={roundState.plate} onNextRound={handleNextRound} />
-        )}
-
-        {showRules && <RulesModal isOpen={showRules} onClose={() => setShowRules(false)} />}
-      </AnimatePresence>
     </div>
   );
 }
