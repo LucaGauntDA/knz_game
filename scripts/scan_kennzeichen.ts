@@ -40,6 +40,17 @@ const COUNTRY_NAMES: Record<string, string> = {
   TR: 'Türkei',
   UA: 'Ukraine',
   L: 'Luxemburg',
+  CHN: 'China',
+  CY: 'Zypern',
+  FL: 'Liechtenstein',
+  LAR: 'Libyen',
+  M: 'Malta',
+  MA: 'Marokko',
+  MD: 'Moldau',
+  OM: 'Oman',
+  TN: 'Tunesien',
+  UAE: 'Ver. Arab. Emirate',
+  UZ: 'Usbekistan',
 };
 
 const STAGES = ['harder', 'hard', 'easy', 'solution'];

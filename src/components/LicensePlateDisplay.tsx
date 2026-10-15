@@ -39,16 +39,16 @@ export const LicensePlateDisplay: React.FC<LicensePlateDisplayProps> = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0.8 }}
           transition={{ duration: 0.15, ease: 'easeOut' }}
-          className="w-full h-full flex items-center justify-center max-w-[680px]"
+          className="w-full h-full flex items-center justify-center max-w-[880px]"
         >
-          {/* Kennzeichen-Bild ohne jegliche künstliche Rahmen, Ränder oder Boxen */}
+          {/* Großes Kennzeichen-Bild ohne jegliche Ränder */}
           <img
             src={imgSrc}
             alt="Kennzeichen Rätsel"
             referrerPolicy="no-referrer"
             onLoad={() => setImgLoaded(true)}
             onError={handleImgError}
-            className={`w-full max-h-[36vh] sm:max-h-[38vh] object-contain transition-opacity duration-200 ${
+            className={`w-full max-h-[46vh] sm:max-h-[50vh] object-contain transition-opacity duration-200 drop-shadow-2xl ${
               imgLoaded ? 'opacity-100' : 'opacity-80'
             }`}
           />

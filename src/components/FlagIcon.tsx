@@ -31,10 +31,10 @@ export const FlagIcon: React.FC<FlagIconProps> = ({ oval, className = '' }) => {
     /(iPhone|iPad|iPod|Macintosh|Mac OS X)/i.test(navigator.userAgent || '');
 
   if (isApple) {
-    // Pure native iOS flag emoji on Apple devices (iPad, iPhone, Mac)
+    // Large, crisp native iOS flag emoji on Apple devices (iPad, iPhone, Mac)
     return (
       <span
-        className={`inline-flex items-center justify-center leading-none select-none text-4xl sm:text-5xl md:text-6xl font-['Apple_Color_Emoji',_-apple-system,_sans-serif] ${className}`}
+        className={`inline-flex items-center justify-center leading-none select-none text-5xl sm:text-6xl md:text-7xl lg:text-[4.8rem] font-['Apple_Color_Emoji',_-apple-system,_sans-serif] ${className}`}
         role="img"
         aria-label={`Flagge ${country.nameDe}`}
       >
@@ -43,8 +43,7 @@ export const FlagIcon: React.FC<FlagIconProps> = ({ oval, className = '' }) => {
     );
   }
 
-  // On non-Apple platforms (like Windows where browsers don't bundle flag emojis natively),
-  // render high-resolution flag graphic with iOS emoji rounded style and fallback to emoji
+  // On non-Apple platforms, render large high-resolution flag graphic with iOS emoji rounded style
   if (!imgError) {
     return (
       <div className={`w-full h-full flex items-center justify-center ${className}`}>
@@ -52,7 +51,7 @@ export const FlagIcon: React.FC<FlagIconProps> = ({ oval, className = '' }) => {
           src={`https://flagcdn.com/w160/${code}.png`}
           alt={`Flagge ${country.nameDe}`}
           onError={() => setImgError(true)}
-          className="w-14 h-9 sm:w-16 sm:h-10 md:w-20 md:h-13 object-cover rounded-md shadow-sm select-none pointer-events-none"
+          className="w-16 h-11 sm:w-20 sm:h-13 md:w-26 md:h-17 object-cover rounded-lg shadow-md select-none pointer-events-none"
         />
       </div>
     );
@@ -60,7 +59,7 @@ export const FlagIcon: React.FC<FlagIconProps> = ({ oval, className = '' }) => {
 
   return (
     <span
-      className={`inline-flex items-center justify-center leading-none select-none text-4xl sm:text-5xl font-['Apple_Color_Emoji',_'Segoe_UI_Emoji',_'Noto_Color_Emoji',_sans-serif] ${className}`}
+      className={`inline-flex items-center justify-center leading-none select-none text-5xl sm:text-6xl md:text-7xl font-['Apple_Color_Emoji',_'Segoe_UI_Emoji',_'Noto_Color_Emoji',_sans-serif] ${className}`}
       role="img"
       aria-label={`Flagge ${country.nameDe}`}
     >

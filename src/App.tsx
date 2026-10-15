@@ -380,7 +380,7 @@ export default function App() {
   return (
     <div className="w-full h-dvh bg-[#0a0c10] text-slate-100 flex flex-col justify-between overflow-hidden antialiased font-sans select-none">
       {/* Keine obere Leiste: Bildschirmhöhe 100% für Kennzeichen & Flaggen */}
-      <main className="flex-1 w-full flex flex-col items-center justify-between min-h-0 py-2 sm:py-4 px-2 sm:px-4">
+      <main className="flex-1 w-full flex flex-col items-center justify-between min-h-0 py-2 sm:py-3 px-2 sm:px-4">
         {isGameOver ? (
           <SummaryScreen
             mode={mode}
@@ -389,9 +389,9 @@ export default function App() {
             onSwitchMode={handleToggleMode}
           />
         ) : roundState ? (
-          <div className="w-full h-full flex flex-col items-center justify-between max-w-4xl mx-auto">
-            {/* Oberer Bildschirmbereich: Kennzeichen ohne künstliche Ränder oder Boxen */}
-            <div className="w-full flex-1 flex items-center justify-center min-h-[160px] max-h-[46vh]">
+          <div className="w-full h-full flex flex-col items-center justify-between max-w-5xl mx-auto">
+            {/* Oberer Bildschirmbereich: Kennzeichen viel größer ohne Ränder */}
+            <div className="w-full flex-1 flex items-center justify-center min-h-[180px] max-h-[50vh] py-1">
               <LicensePlateDisplay
                 plate={roundState.plate}
                 currentStage={roundState.currentStage}
@@ -401,8 +401,8 @@ export default function App() {
               />
             </div>
 
-            {/* Unterer Bildschirmbereich: 15 Flaggen + ❓ Emoji in 4x4 ohne Boxen */}
-            <div className="w-full pb-2 sm:pb-6 flex flex-col justify-end">
+            {/* Unterer Bildschirmbereich: 15 Flaggen + ❓ Emoji in 4x4 viel größer */}
+            <div className="w-full pb-2 sm:pb-5 md:pb-6 flex flex-col justify-end">
               <FlagGrid
                 flags={roundState.displayFlags}
                 correctOval={roundState.plate.oval}
