@@ -15,9 +15,9 @@ export default defineConfig(() => {
             if (req.url && req.url.startsWith('/kennzeichen_game/')) {
               const fs = require('fs');
               const relPath = decodeURIComponent(req.url.replace('/kennzeichen_game/', ''));
-              // Check in root ./kennzeichen_game first, then ./public/kennzeichen_game
-              const rootPath = path.resolve(__dirname, 'kennzeichen_game', relPath);
-              const publicPath = path.resolve(__dirname, 'public', 'kennzeichen_game', relPath);
+              const projectRoot = process.cwd();
+              const rootPath = path.resolve(projectRoot, 'kennzeichen_game', relPath);
+              const publicPath = path.resolve(projectRoot, 'public', 'kennzeichen_game', relPath);
 
               const targetFile = fs.existsSync(rootPath) ? rootPath : fs.existsSync(publicPath) ? publicPath : null;
 
@@ -46,7 +46,7 @@ export default defineConfig(() => {
     ],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
+        '@': path.resolve(process.cwd(), '.'),
       },
     },
     server: {
