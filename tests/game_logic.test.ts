@@ -96,6 +96,10 @@ const easyOnlyPlate: PlateManifestEntry = {
   availableStages: ['easy', 'solution'],
 };
 assert(getInitialStage(easyOnlyPlate) === 'easy', 'Correctly picks easiest available when harder/hard missing');
+assert(getNextEasierStage(easyOnlyPlate, 'easy') === 'solution', 'Plate with only easy & solution: easy -> solution');
+assert(getNextEasierStage(easyOnlyPlate, 'solution') === null, 'Plate with only easy & solution: solution -> null');
+assert(calculateRoundScore(0, false) === 5, 'Starting at easy and guessing correctly on 1st attempt gives 5 points');
+assert(calculateRoundScore(1, false) === 4, 'Starting at easy and simplifying to solution gives 4 points');
 
 console.log('\n--- 3. Testing Secret Limit & Attempts Counting ---');
 // Secret limit between 3 and 5

@@ -45,15 +45,6 @@ export default function App() {
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [showRules, setShowRules] = useState<boolean>(false);
 
-  // Load manifest if dynamic file is provided
-  useEffect(() => {
-    loadPlatesManifest().then((loaded) => {
-      if (loaded.length > 0) {
-        setAllPlates(loaded);
-      }
-    });
-  }, []);
-
   // Preload upcoming images
   const preloadPlateImages = useCallback((plate: PlateManifestEntry) => {
     Object.values(plate.stages).forEach((url) => {
@@ -64,31 +55,8 @@ export default function App() {
     });
   }, []);
 
-  // Initialize a new game session with shuffled plates
-  const initGame = useCallback(
-    (targetMode: GameMode = mode, sourcePlates: PlateManifestEntry[] = allPlates) => {
-      const shuffled = shuffleArray(sourcePlates);
-      const queue = targetMode === 'standard' ? shuffled.slice(0, Math.min(10, shuffled.length)) : shuffled;
-
-      setPlatesQueue(queue);
-      setCurrentRoundIndex(0);
-      setRoundHistory([]);
-      setIsGameOver(false);
-
-      if (queue.length > 0) {
-        // Preload first 2 plates
-        preloadPlateImages(queue[0]);
-        if (queue.length > 1) {
-          preloadPlateImages(queue[1]);
-        }
-        setupRound(queue[0], 1);
-      }
-    },
-    [mode, allPlates, preloadPlateImages]
-  );
-
   // Set up a specific round
-  const setupRound = (plate: PlateManifestEntry, roundNum: number) => {
+  const setupRound = useCallback((plate: PlateManifestEntry, roundNum: number) => {
     const initialStage = getInitialStage(plate);
     // Secret threshold of failed attempts + hints: randomly 3 to 5
     const secretLimit = Math.floor(Math.random() * 3) + 3;
@@ -113,16 +81,42 @@ export default function App() {
       selectedWinningOval: null,
       displayFlags: roundFlags,
     });
-  };
+  }, []);
 
-  // Start game immediately on initial render
-  const isInitialMount = useRef(true);
+  // Initialize a new game session with shuffled plates
+  const initGame = useCallback(
+    (targetMode: GameMode = mode, sourcePlates: PlateManifestEntry[] = allPlates) => {
+      const shuffled = shuffleArray(sourcePlates);
+      const queue = targetMode === 'standard' ? shuffled.slice(0, Math.min(10, shuffled.length)) : shuffled;
+
+      setPlatesQueue(queue);
+      setCurrentRoundIndex(0);
+      setRoundHistory([]);
+      setIsGameOver(false);
+
+      if (queue.length > 0) {
+        // Preload first 2 plates
+        preloadPlateImages(queue[0]);
+        if (queue.length > 1) {
+          preloadPlateImages(queue[1]);
+        }
+        setupRound(queue[0], 1);
+      }
+    },
+    [mode, allPlates, preloadPlateImages, setupRound]
+  );
+
+  // Start game immediately on initial render and load manifest
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      initGame('standard', BUILTIN_PLATES);
-    }
-  }, [initGame]);
+    loadPlatesManifest().then((loaded) => {
+      if (loaded.length > 0) {
+        setAllPlates(loaded);
+        initGame(mode, loaded);
+      } else {
+        initGame(mode, BUILTIN_PLATES);
+      }
+    });
+  }, [initGame, mode]);
 
   // Handle flag click
   const handleSelectFlag = (selectedOval: string) => {
