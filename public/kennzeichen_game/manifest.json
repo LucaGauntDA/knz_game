@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-15T08:57:31.586Z",
+  "generatedAt": "2026-10-15T09:10:38.951Z",
   "plates": [
     {
       "oval": "A",
@@ -58,6 +58,93 @@
       "stages": {
         "easy": "/kennzeichen_game/DK/DK1_easy.JPG",
         "solution": "/kennzeichen_game/DK/DK1_solution.JPG"
+      }
+    },
+    {
+      "oval": "E",
+      "number": 1,
+      "countryName": "Spanien",
+      "stages": {
+        "easy": "/kennzeichen_game/E/E1_easy.JPG",
+        "solution": "/kennzeichen_game/E/E1_solution.JPG"
+      }
+    },
+    {
+      "oval": "F",
+      "number": 1,
+      "countryName": "Frankreich",
+      "stages": {
+        "easy": "/kennzeichen_game/F/F1_easy.JPG",
+        "hard": "/kennzeichen_game/F/F1_hard.JPG",
+        "solution": "/kennzeichen_game/F/F1_solution.JPG"
+      }
+    },
+    {
+      "oval": "FIN",
+      "number": 1,
+      "countryName": "Finnland",
+      "stages": {
+        "easy": "/kennzeichen_game/FIN/FIN1_easy.JPG",
+        "solution": "/kennzeichen_game/FIN/FIN1_solution.JPG"
+      }
+    },
+    {
+      "oval": "GR",
+      "number": 1,
+      "countryName": "Griechenland",
+      "stages": {
+        "easy": "/kennzeichen_game/GR/GR1_easy.JPG",
+        "hard": "/kennzeichen_game/GR/GR1_hard.JPG",
+        "solution": "/kennzeichen_game/GR/GR1_solution.JPG"
+      }
+    },
+    {
+      "oval": "H",
+      "number": 1,
+      "countryName": "Ungarn",
+      "stages": {
+        "easy": "/kennzeichen_game/H/H1_easy.JPG",
+        "hard": "/kennzeichen_game/H/H1_hard.JPG",
+        "solution": "/kennzeichen_game/H/H1_solution.JPG"
+      }
+    },
+    {
+      "oval": "HR",
+      "number": 1,
+      "countryName": "Kroatien",
+      "stages": {
+        "easy": "/kennzeichen_game/HR/HR1_easy.JPG",
+        "hard": "/kennzeichen_game/HR/HR1_hard.JPG",
+        "solution": "/kennzeichen_game/HR/HR1_solution.JPG"
+      }
+    },
+    {
+      "oval": "I",
+      "number": 1,
+      "countryName": "Italien",
+      "stages": {
+        "easy": "/kennzeichen_game/I/I1_easy.JPG",
+        "hard": "/kennzeichen_game/I/I1_hard.JPG",
+        "solution": "/kennzeichen_game/I/I1_solution.JPG"
+      }
+    },
+    {
+      "oval": "I",
+      "number": 2,
+      "countryName": "Italien",
+      "stages": {
+        "easy": "/kennzeichen_game/I/I2_easy.JPG",
+        "hard": "/kennzeichen_game/I/I2_hard.JPG",
+        "solution": "/kennzeichen_game/I/I2_solution.JPG"
+      }
+    },
+    {
+      "oval": "NL",
+      "number": 1,
+      "countryName": "Niederlande",
+      "stages": {
+        "easy": "/kennzeichen_game/NL/NL1_easy.JPG",
+        "solution": "/kennzeichen_game/NL/NL1_solution.JPG"
       }
     }
   ]

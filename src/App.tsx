@@ -45,6 +45,10 @@ export default function App() {
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [showRules, setShowRules] = useState<boolean>(false);
 
+  const platesRef = useRef<PlateManifestEntry[]>(BUILTIN_PLATES);
+  const modeRef = useRef<GameMode>(mode);
+  modeRef.current = mode;
+
   // Preload upcoming images
   const preloadPlateImages = useCallback((plate: PlateManifestEntry) => {
     Object.values(plate.stages).forEach((url) => {
@@ -85,9 +89,11 @@ export default function App() {
 
   // Initialize a new game session with shuffled plates
   const initGame = useCallback(
-    (targetMode: GameMode = mode, sourcePlates: PlateManifestEntry[] = allPlates) => {
-      const shuffled = shuffleArray(sourcePlates);
-      const queue = targetMode === 'standard' ? shuffled.slice(0, Math.min(10, shuffled.length)) : shuffled;
+    (targetMode?: GameMode, sourcePlates?: PlateManifestEntry[]) => {
+      const activeMode = targetMode ?? modeRef.current;
+      const plates = sourcePlates ?? platesRef.current;
+      const shuffled = shuffleArray(plates);
+      const queue = activeMode === 'standard' ? shuffled.slice(0, Math.min(10, shuffled.length)) : shuffled;
 
       setPlatesQueue(queue);
       setCurrentRoundIndex(0);
@@ -103,20 +109,26 @@ export default function App() {
         setupRound(queue[0], 1);
       }
     },
-    [mode, allPlates, preloadPlateImages, setupRound]
+    [preloadPlateImages, setupRound]
   );
 
-  // Start game immediately on initial render and load manifest
+  // Start game immediately on initial render and load manifest once
   useEffect(() => {
+    let isCancelled = false;
     loadPlatesManifest().then((loaded) => {
+      if (isCancelled) return;
       if (loaded.length > 0) {
+        platesRef.current = loaded;
         setAllPlates(loaded);
-        initGame(mode, loaded);
+        initGame(modeRef.current, loaded);
       } else {
-        initGame(mode, BUILTIN_PLATES);
+        initGame(modeRef.current, BUILTIN_PLATES);
       }
     });
-  }, [initGame, mode]);
+    return () => {
+      isCancelled = true;
+    };
+  }, [initGame]);
 
   // Handle flag click
   const handleSelectFlag = (selectedOval: string) => {
