@@ -65,10 +65,11 @@ export default function App() {
     // Secret threshold of failed attempts + hints: randomly 3 to 5
     const secretLimit = Math.floor(Math.random() * 3) + 3;
 
-    // Build 16 flags: 1 correct flag + 15 random non-duplicate distractors
+    // Build 15 flags: 1 correct flag + 14 random non-duplicate distractors
+    // The 16th cell (bottom right) is reserved for the ❓ hint emoji
     const correctOval = plate.oval;
     const availableDistractors = COUNTRIES.filter((c) => c.oval !== correctOval).map((c) => c.oval);
-    const chosenDistractors = shuffleArray(availableDistractors).slice(0, 15);
+    const chosenDistractors = shuffleArray(availableDistractors).slice(0, 14);
     const roundFlags = shuffleArray([correctOval, ...chosenDistractors]);
 
     setRoundState({

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-15T09:10:38.951Z",
+  "generatedAt": "2026-10-15T09:34:46.076Z",
   "plates": [
     {
       "oval": "A",
@@ -145,6 +145,92 @@
       "stages": {
         "easy": "/kennzeichen_game/NL/NL1_easy.JPG",
         "solution": "/kennzeichen_game/NL/NL1_solution.JPG"
+      }
+    },
+    {
+      "oval": "RKS",
+      "number": 1,
+      "countryName": "Kosovo",
+      "stages": {
+        "easy": "/kennzeichen_game/RKS/RKS1_easy.JPG",
+        "hard": "/kennzeichen_game/RKS/RKS1_hard.JPG",
+        "solution": "/kennzeichen_game/RKS/RKS1_solution.JPG"
+      }
+    },
+    {
+      "oval": "RO",
+      "number": 1,
+      "countryName": "Rumänien",
+      "stages": {
+        "easy": "/kennzeichen_game/RO/RO1_easy.JPG",
+        "solution": "/kennzeichen_game/RO/RO1_solution.JPG"
+      }
+    },
+    {
+      "oval": "S",
+      "number": 1,
+      "countryName": "Schweden",
+      "stages": {
+        "easy": "/kennzeichen_game/S/S1_easy.JPG",
+        "solution": "/kennzeichen_game/S/S1_solution.JPG"
+      }
+    },
+    {
+      "oval": "SK",
+      "number": 1,
+      "countryName": "Slowakei",
+      "stages": {
+        "easy": "/kennzeichen_game/SK/SK1_easy.JPG",
+        "hard": "/kennzeichen_game/SK/SK1_hard.JPG",
+        "solution": "/kennzeichen_game/SK/SK1_solution.JPG"
+      }
+    },
+    {
+      "oval": "SK",
+      "number": 2,
+      "countryName": "Slowakei",
+      "stages": {
+        "easy": "/kennzeichen_game/SK/SK2_easy.JPG",
+        "hard": "/kennzeichen_game/SK/SK2_hard.JPG",
+        "solution": "/kennzeichen_game/SK/SK2_solution.JPG"
+      }
+    },
+    {
+      "oval": "SK",
+      "number": 3,
+      "countryName": "Slowakei",
+      "stages": {
+        "easy": "/kennzeichen_game/SK/SK3_easy.JPG",
+        "solution": "/kennzeichen_game/SK/SK3_solution.JPG"
+      }
+    },
+    {
+      "oval": "SLO",
+      "number": 1,
+      "countryName": "Slowenien",
+      "stages": {
+        "easy": "/kennzeichen_game/SLO/SLO1_easy.JPG",
+        "hard": "/kennzeichen_game/SLO/SLO1_hard.JPG",
+        "solution": "/kennzeichen_game/SLO/SLO1_solution.JPG"
+      }
+    },
+    {
+      "oval": "SRB",
+      "number": 1,
+      "countryName": "Serbien",
+      "stages": {
+        "easy": "/kennzeichen_game/SRB/SRB1_easy.JPG",
+        "hard": "/kennzeichen_game/SRB/SRB1_hard.JPG",
+        "solution": "/kennzeichen_game/SRB/SRB1_solution.JPG"
+      }
+    },
+    {
+      "oval": "TR",
+      "number": 1,
+      "countryName": "Türkei",
+      "stages": {
+        "easy": "/kennzeichen_game/TR/TR1_easy.JPG",
+        "solution": "/kennzeichen_game/TR/TR1_solution.JPG"
       }
     }
   ]

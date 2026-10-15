@@ -120,14 +120,17 @@ for (const p of queue) {
 }
 assert(played.size === sessionRounds, `Exactly ${sessionRounds} unique plates played`);
 
-console.log('\n--- 5. Testing Flag Generation (1 correct + 15 distractors = 16 total) ---');
+console.log('\n--- 5. Testing Flag Generation (1 correct + 14 distractors = 15 flags + 1 ❓ cell = 16 total) ---');
 const targetOval = 'RKS';
 const distractors = COUNTRIES.filter((c) => c.oval !== targetOval).map((c) => c.oval);
-assert(distractors.length >= 15, `At least 15 distractors available (found ${distractors.length})`);
-const chosen = distractors.slice(0, 15);
+assert(distractors.length >= 14, `At least 14 distractors available (found ${distractors.length})`);
+const chosen = distractors.slice(0, 14);
 const flagsGrid = [targetOval, ...chosen];
-assert(flagsGrid.length === 16, 'Grid has exactly 16 flags');
-assert(flagsGrid.includes(targetOval), 'Grid contains target flag');
-assert(new Set(flagsGrid).size === 16, 'Grid contains zero duplicates');
+assert(flagsGrid.length === 15, 'Flags list has exactly 15 flags');
+assert(flagsGrid.includes(targetOval), 'Flags list contains target flag');
+assert(new Set(flagsGrid).size === 15, 'Flags list contains zero duplicates');
+// 15 flags + 1 question mark cell = 16 total grid cells in 4x4
+const totalGridCells = flagsGrid.length + 1;
+assert(totalGridCells === 16, '4x4 grid has exactly 16 cells (15 flags + 1 question mark emoji)');
 
 console.log('\n🎉 ALL LOGIC AND SPECIFICATION TESTS PASSED!');
