@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-15T09:51:20.655Z",
+  "generatedAt": "2026-10-19T19:18:42.674Z",
   "plates": [
     {
       "oval": "A",
@@ -23,6 +23,32 @@
       }
     },
     {
+      "oval": "BG",
+      "number": 1,
+      "countryName": "Bulgarien",
+      "stages": {
+        "easy": "/kennzeichen_game/BG/BG1_easy.JPG",
+        "solution": "/kennzeichen_game/BG/BG1_solution.JPG"
+      }
+    },
+    {
+      "oval": "BIH",
+      "number": 1,
+      "countryName": "Bosnien & Herzegowina",
+      "stages": {
+        "easy": "/kennzeichen_game/BIH/BIH1_easy.JPG",
+        "solution": "/kennzeichen_game/BIH/BIH1_solution.JPG"
+      }
+    },
+    {
+      "oval": "BIH",
+      "number": 2,
+      "countryName": "Bosnien & Herzegowina",
+      "stages": {
+        "solution": "/kennzeichen_game/BIH/BIH2_solution.JPG"
+      }
+    },
+    {
       "oval": "CH",
       "number": 1,
       "countryName": "Schweiz",
@@ -30,6 +56,25 @@
         "easy": "/kennzeichen_game/CH/CH1_easy.JPG",
         "hard": "/kennzeichen_game/CH/CH1_hard.JPG",
         "solution": "/kennzeichen_game/CH/CH1_solution.JPG"
+      }
+    },
+    {
+      "oval": "CHN",
+      "number": 1,
+      "countryName": "China",
+      "stages": {
+        "easy": "/kennzeichen_game/CHN/CHN1_easy.JPG",
+        "solution": "/kennzeichen_game/CHN/CHN1_solution.JPG"
+      }
+    },
+    {
+      "oval": "CY",
+      "number": 1,
+      "countryName": "Zypern",
+      "stages": {
+        "easy": "/kennzeichen_game/CY/CY1_easy.JPG",
+        "hard": "/kennzeichen_game/CY/CY1_hard.JPG",
+        "solution": "/kennzeichen_game/CY/CY1_solution.JPG"
       }
     },
     {
@@ -89,6 +134,16 @@
       }
     },
     {
+      "oval": "FL",
+      "number": 1,
+      "countryName": "Liechtenstein",
+      "stages": {
+        "easy": "/kennzeichen_game/FL/FL1_easy.JPG",
+        "hard": "/kennzeichen_game/FL/FL1_hard.JPG",
+        "solution": "/kennzeichen_game/FL/FL1_original.JPG"
+      }
+    },
+    {
       "oval": "GR",
       "number": 1,
       "countryName": "Griechenland",
@@ -139,12 +194,126 @@
       }
     },
     {
+      "oval": "IRL",
+      "number": 1,
+      "countryName": "Irland",
+      "stages": {
+        "easy": "/kennzeichen_game/IRL/IRL1_easy.JPG",
+        "hard": "/kennzeichen_game/IRL/IRL1_hard.JPG",
+        "solution": "/kennzeichen_game/IRL/IRL1_solution.JPG"
+      }
+    },
+    {
+      "oval": "L",
+      "number": 1,
+      "countryName": "Luxemburg",
+      "stages": {
+        "easy": "/kennzeichen_game/L/L1_easy.JPG",
+        "solution": "/kennzeichen_game/L/L1_solution.JPG"
+      }
+    },
+    {
+      "oval": "LAR",
+      "number": 1,
+      "countryName": "Libyen",
+      "stages": {
+        "easy": "/kennzeichen_game/LAR/LAR1_easy.JPG",
+        "solution": "/kennzeichen_game/LAR/LAR1_solution.JPG"
+      }
+    },
+    {
+      "oval": "LT",
+      "number": 1,
+      "countryName": "Litauen",
+      "stages": {
+        "easy": "/kennzeichen_game/LT/LT1_easy.JPG",
+        "hard": "/kennzeichen_game/LT/LT1_hard.JPG",
+        "solution": "/kennzeichen_game/LT/LT1_solution.JPG"
+      }
+    },
+    {
+      "oval": "LV",
+      "number": 1,
+      "countryName": "Lettland",
+      "stages": {
+        "easy": "/kennzeichen_game/LV/LV1_easy 2.JPG",
+        "solution": "/kennzeichen_game/LV/LV1_solution.JPG"
+      }
+    },
+    {
+      "oval": "M",
+      "number": 1,
+      "countryName": "Malta",
+      "stages": {
+        "easy": "/kennzeichen_game/M/M1_easy.JPG",
+        "solution": "/kennzeichen_game/M/M1_solution.JPG"
+      }
+    },
+    {
+      "oval": "MA",
+      "number": 1,
+      "countryName": "Marokko",
+      "stages": {
+        "easy": "/kennzeichen_game/MA/MA1_easy.JPG",
+        "hard": "/kennzeichen_game/MA/MA1_hard.JPG",
+        "solution": "/kennzeichen_game/MA/MA1_solution.JPG"
+      }
+    },
+    {
+      "oval": "MD",
+      "number": 1,
+      "countryName": "Moldau",
+      "stages": {
+        "easy": "/kennzeichen_game/MD/MD1_easy.JPG",
+        "solution": "/kennzeichen_game/MD/MD1_solution.JPG"
+      }
+    },
+    {
+      "oval": "N",
+      "number": 1,
+      "countryName": "Norwegen",
+      "stages": {
+        "easy": "/kennzeichen_game/N/N1_easy.JPG",
+        "hard": "/kennzeichen_game/N/N1_hard.JPG",
+        "solution": "/kennzeichen_game/N/N1_solution.JPG"
+      }
+    },
+    {
       "oval": "NL",
       "number": 1,
       "countryName": "Niederlande",
       "stages": {
         "easy": "/kennzeichen_game/NL/NL1_easy.JPG",
         "solution": "/kennzeichen_game/NL/NL1_solution.JPG"
+      }
+    },
+    {
+      "oval": "NMK",
+      "number": 1,
+      "countryName": "Nordmazedonien",
+      "stages": {
+        "easy": "/kennzeichen_game/NMK/NMK1_easy.JPG",
+        "hard": "/kennzeichen_game/NMK/NMK1_hard.JPG",
+        "solution": "/kennzeichen_game/NMK/NMK1_solution.JPG"
+      }
+    },
+    {
+      "oval": "OM",
+      "number": 1,
+      "countryName": "Oman",
+      "stages": {
+        "easy": "/kennzeichen_game/OM/OM1_easy.JPG",
+        "hard": "/kennzeichen_game/OM/OM1_hard.JPG",
+        "solution": "/kennzeichen_game/OM/OM1_solution.JPG"
+      }
+    },
+    {
+      "oval": "P",
+      "number": 1,
+      "countryName": "Portugal",
+      "stages": {
+        "easy": "/kennzeichen_game/P/P1_easy.JPG",
+        "solution": "/kennzeichen_game/P/P1_solution.JPG"
       }
     },
     {
@@ -225,12 +394,78 @@
       }
     },
     {
+      "oval": "TN",
+      "number": 1,
+      "countryName": "Tunesien",
+      "stages": {
+        "easy": "/kennzeichen_game/TN/TN1_easy.JPG",
+        "solution": "/kennzeichen_game/TN/TN1_solution.JPG"
+      }
+    },
+    {
       "oval": "TR",
       "number": 1,
       "countryName": "Türkei",
       "stages": {
         "easy": "/kennzeichen_game/TR/TR1_easy.JPG",
         "solution": "/kennzeichen_game/TR/TR1_solution.JPG"
+      }
+    },
+    {
+      "oval": "UA",
+      "number": 1,
+      "countryName": "Ukraine",
+      "stages": {
+        "easy": "/kennzeichen_game/UA/UA1_easy.JPG",
+        "solution": "/kennzeichen_game/UA/UA1_solution.JPG",
+        "hard": "/kennzeichen_game/UA/UA_hard.JPG"
+      }
+    },
+    {
+      "oval": "UAE",
+      "number": 1,
+      "countryName": "Ver. Arab. Emirate",
+      "stages": {
+        "easy": "/kennzeichen_game/UAE/UAE1_easy.JPG",
+        "hard": "/kennzeichen_game/UAE/UAE1_hard.JPG",
+        "solution": "/kennzeichen_game/UAE/UAE1_solution.JPG"
+      }
+    },
+    {
+      "oval": "UAE",
+      "number": 2,
+      "countryName": "Ver. Arab. Emirate",
+      "stages": {
+        "easy": "/kennzeichen_game/UAE/UAE2_easy.JPG",
+        "solution": "/kennzeichen_game/UAE/UAE2_solution.JPG"
+      }
+    },
+    {
+      "oval": "UK",
+      "number": 1,
+      "countryName": "Großbritannien",
+      "stages": {
+        "easy": "/kennzeichen_game/UK/UK1_easy.JPG",
+        "solution": "/kennzeichen_game/UK/UK1_solution.JPG"
+      }
+    },
+    {
+      "oval": "UK",
+      "number": 2,
+      "countryName": "Großbritannien",
+      "stages": {
+        "easy": "/kennzeichen_game/UK/UK2_easy.JPG",
+        "solution": "/kennzeichen_game/UK/UK2_solution.JPG"
+      }
+    },
+    {
+      "oval": "UZ",
+      "number": 1,
+      "countryName": "Usbekistan",
+      "stages": {
+        "easy": "/kennzeichen_game/UZ/UZ1_easy.JPG",
+        "hard": "/kennzeichen_game/UZ/UZ1_hard.JPG",
+        "solution": "/kennzeichen_game/UZ/UZ1_solution.JPG"
       }
     }
   ]

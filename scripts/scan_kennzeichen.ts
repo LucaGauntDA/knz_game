@@ -128,13 +128,15 @@ export function scanDirectories() {
 
       const files = fs.readdirSync(folderPath);
       for (const file of files) {
-        // Match schema: OVALNUMMER_STUFE.ext (e.g. RKS1_solution.jpg or D1_easy.JPG)
-        const match = file.match(/^([A-Z0-9]+?)(\d+)_([a-zA-Z]+)\.(jpe?g|png|webp)$/i);
+        // Match schema: OVAL[NUM]_[STAGE][optional space/number].ext
+        const match = file.match(/^([A-Z0-9]+?)(?:(\d+))?_([a-zA-Z]+)(?:\s*\d*)?\.(jpe?g|png|webp)$/i);
         if (!match) continue;
 
-        const [, fileOval, numStr, stageRaw] = match;
-        const num = parseInt(numStr, 10);
-        const stage = stageRaw.toLowerCase();
+        const [, , numStr, stageRaw] = match;
+        const num = numStr ? parseInt(numStr, 10) : 1;
+        let stage = stageRaw.toLowerCase();
+        if (stage === 'original') stage = 'solution';
+
         const plateKey = `${oval}${num}`;
 
         if (!STAGES.includes(stage)) continue;

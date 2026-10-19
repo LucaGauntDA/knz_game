@@ -385,7 +385,14 @@ export default function App() {
           <SummaryScreen
             mode={mode}
             results={roundHistory}
-            onPlayAgain={() => initGame(mode)}
+            onPlayAgain={() => {
+              setMode('standard');
+              initGame('standard');
+            }}
+            onStartEndless={() => {
+              setMode('endless');
+              initGame('endless');
+            }}
             onSwitchMode={handleToggleMode}
           />
         ) : roundState ? (
