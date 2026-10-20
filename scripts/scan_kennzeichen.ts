@@ -51,6 +51,13 @@ const COUNTRY_NAMES: Record<string, string> = {
   TN: 'Tunesien',
   UAE: 'Ver. Arab. Emirate',
   UZ: 'Usbekistan',
+  NGR: 'Nigeria',
+  IL: 'Israel',
+  RL: 'Libanon',
+  ROK: 'Südkorea',
+  KZ: 'Kasachstan',
+  IR: 'Iran',
+  SGP: 'Singapur',
 };
 
 const STAGES = ['harder', 'hard', 'easy', 'solution'];

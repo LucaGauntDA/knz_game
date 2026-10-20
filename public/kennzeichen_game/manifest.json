@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-10-19T19:18:42.674Z",
+  "generatedAt": "2026-10-20T08:17:23.997Z",
   "plates": [
     {
       "oval": "A",
@@ -194,6 +194,28 @@
       }
     },
     {
+      "oval": "IL",
+      "number": 1,
+      "countryName": "Israel",
+      "stages": {
+        "easy": "/kennzeichen_game/IL/IL1_easy.JPG",
+        "hard": "/kennzeichen_game/IL/IL1_hard.JPG",
+        "harder": "/kennzeichen_game/IL/IL1_harder.JPG",
+        "solution": "/kennzeichen_game/IL/IL1_solution.JPG"
+      }
+    },
+    {
+      "oval": "IR",
+      "number": 1,
+      "countryName": "Iran",
+      "stages": {
+        "easy": "/kennzeichen_game/IR/IR1_easy.JPG",
+        "hard": "/kennzeichen_game/IR/IR1_hard.JPG",
+        "harder": "/kennzeichen_game/IR/IR1_harder.JPG",
+        "solution": "/kennzeichen_game/IR/IR1_solution.JPG"
+      }
+    },
+    {
       "oval": "IRL",
       "number": 1,
       "countryName": "Irland",
@@ -201,6 +223,16 @@
         "easy": "/kennzeichen_game/IRL/IRL1_easy.JPG",
         "hard": "/kennzeichen_game/IRL/IRL1_hard.JPG",
         "solution": "/kennzeichen_game/IRL/IRL1_solution.JPG"
+      }
+    },
+    {
+      "oval": "KZ",
+      "number": 1,
+      "countryName": "Kasachstan",
+      "stages": {
+        "easy": "/kennzeichen_game/KZ/KZ1_easy.JPG",
+        "hard": "/kennzeichen_game/KZ/KZ1_hard.JPG",
+        "solution": "/kennzeichen_game/KZ/KZ1_solution.JPG"
       }
     },
     {
@@ -279,6 +311,16 @@
       }
     },
     {
+      "oval": "NGR",
+      "number": 1,
+      "countryName": "Nigeria",
+      "stages": {
+        "easy": "/kennzeichen_game/NGR/NGR1_easy.JPG",
+        "hard": "/kennzeichen_game/NGR/NGR1_hard.JPG",
+        "solution": "/kennzeichen_game/NGR/NGR1_solution.JPG"
+      }
+    },
+    {
       "oval": "NL",
       "number": 1,
       "countryName": "Niederlande",
@@ -327,6 +369,16 @@
       }
     },
     {
+      "oval": "RL",
+      "number": 1,
+      "countryName": "Libanon",
+      "stages": {
+        "easy": "/kennzeichen_game/RL/RL1_easy.JPG",
+        "hard": "/kennzeichen_game/RL/RL1_hard.JPG",
+        "solution": "/kennzeichen_game/RL/RL1_solution.JPG"
+      }
+    },
+    {
       "oval": "RO",
       "number": 1,
       "countryName": "Rumänien",
@@ -336,12 +388,30 @@
       }
     },
     {
+      "oval": "ROK",
+      "number": 1,
+      "countryName": "Südkorea",
+      "stages": {
+        "easy": "/kennzeichen_game/ROK/ROK1_easy.JPG",
+        "hard": "/kennzeichen_game/ROK/ROK1_hard.JPG",
+        "solution": "/kennzeichen_game/ROK/ROK1_solution.JPG"
+      }
+    },
+    {
       "oval": "S",
       "number": 1,
       "countryName": "Schweden",
       "stages": {
         "easy": "/kennzeichen_game/S/S1_easy.JPG",
         "solution": "/kennzeichen_game/S/S1_solution.JPG"
+      }
+    },
+    {
+      "oval": "SGP",
+      "number": 1,
+      "countryName": "Singapur",
+      "stages": {
+        "solution": "/kennzeichen_game/SGP/SGP1_solution.JPG"
       }
     },
     {

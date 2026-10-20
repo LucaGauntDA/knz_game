@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { FlagIcon } from './FlagIcon';
 import { COUNTRY_BY_OVAL } from '../data/countries';
+import { AppleEmoji } from '../utils/appleEmoji';
 
 interface FlagGridProps {
   flags: string[]; // 15 oval codes (1 correct + 14 distractors)
@@ -27,7 +28,7 @@ export const FlagGrid: React.FC<FlagGridProps> = ({
 
   return (
     <div className="w-full max-w-[860px] mx-auto select-none px-2 sm:px-4">
-      {/* 4 rows x 4 columns grid: viel größer, ohne Boxen, mit ❓ Emoji in Zelle 16 */}
+      {/* 4 rows x 4 columns grid: ohne Boxen, mit iOS-Emojis auf allen Plattformen */}
       <div className="w-full grid grid-cols-4 gap-y-3 sm:gap-y-5 md:gap-y-6 gap-x-2 sm:gap-x-4 md:gap-x-6 items-center justify-items-center">
         {displayFlags.map((oval) => {
           const isWrong = wrongGuesses.includes(oval);
@@ -60,7 +61,7 @@ export const FlagGrid: React.FC<FlagGridProps> = ({
           );
         })}
 
-        {/* 16th cell (bottom right): Großes Fragezeichen-Emoji ohne Box */}
+        {/* 16th cell (bottom right): iOS Fragezeichen-Emoji (auf allen Plattformen) */}
         <motion.button
           key="hint-question-button"
           type="button"
@@ -76,13 +77,13 @@ export const FlagGrid: React.FC<FlagGridProps> = ({
           title="Hinweis: Kennzeichen erleichtern"
           aria-label="Hinweis: Kennzeichen erleichtern"
         >
-          <span
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] select-none leading-none"
-            role="img"
-            aria-label="Fragezeichen"
-          >
-            ❓
-          </span>
+          <AppleEmoji
+            emoji="❓"
+            hex="2753"
+            alt="Fragezeichen"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem]"
+            imgClassName="w-11 h-11 sm:w-13 sm:h-13 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain drop-shadow-md select-none pointer-events-none"
+          />
         </motion.button>
       </div>
     </div>

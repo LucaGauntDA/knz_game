@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { GameMode, RoundResult } from '../types/game';
+import { AppleEmoji } from '../utils/appleEmoji';
 
 interface SummaryScreenProps {
   mode: GameMode;
@@ -30,7 +31,7 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({
         {totalScore}
       </motion.div>
 
-      {/* Darunter das 🔄 & ♾️ Emoji */}
+      {/* Darunter das 🔄 & ♾️ Emoji im echten iOS-Stil auf allen Plattformen */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
@@ -43,17 +44,17 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({
           onClick={onPlayAgain}
           whileTap={{ scale: 0.86 }}
           whileHover={{ scale: 1.15 }}
-          className="bg-transparent border-0 outline-none focus:outline-none p-2 cursor-pointer transition-transform duration-150"
+          className="bg-transparent border-0 outline-none focus:outline-none p-2 cursor-pointer transition-transform duration-150 flex items-center justify-center"
           title="Erneut spielen"
           aria-label="Erneut spielen"
         >
-          <span
-            className="text-5xl sm:text-6xl md:text-7xl select-none leading-none filter drop-shadow-[0_4px_12px_rgba(255,255,255,0.25)]"
-            role="img"
-            aria-label="Wiederholen"
-          >
-            🔄
-          </span>
+          <AppleEmoji
+            emoji="🔄"
+            hex="1f504"
+            alt="Wiederholen"
+            className="text-5xl sm:text-6xl md:text-7xl leading-none filter drop-shadow-[0_4px_12px_rgba(255,255,255,0.25)]"
+            imgClassName="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain drop-shadow-[0_4px_12px_rgba(255,255,255,0.25)] select-none pointer-events-none"
+          />
         </motion.button>
 
         {/* ♾️ Endlosmodus */}
@@ -62,17 +63,17 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({
           onClick={onStartEndless || onSwitchMode}
           whileTap={{ scale: 0.86 }}
           whileHover={{ scale: 1.15 }}
-          className="bg-transparent border-0 outline-none focus:outline-none p-2 cursor-pointer transition-transform duration-150"
+          className="bg-transparent border-0 outline-none focus:outline-none p-2 cursor-pointer transition-transform duration-150 flex items-center justify-center"
           title="Endlosmodus spielen"
           aria-label="Endlosmodus"
         >
-          <span
-            className="text-5xl sm:text-6xl md:text-7xl select-none leading-none filter drop-shadow-[0_4px_12px_rgba(255,255,255,0.25)]"
-            role="img"
-            aria-label="Endlosmodus"
-          >
-            ♾️
-          </span>
+          <AppleEmoji
+            emoji="♾️"
+            hex="267e-fe0f"
+            alt="Endlosmodus"
+            className="text-5xl sm:text-6xl md:text-7xl leading-none filter drop-shadow-[0_4px_12px_rgba(255,255,255,0.25)]"
+            imgClassName="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain drop-shadow-[0_4px_12px_rgba(255,255,255,0.25)] select-none pointer-events-none"
+          />
         </motion.button>
       </motion.div>
     </div>

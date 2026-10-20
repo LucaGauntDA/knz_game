@@ -54,6 +54,15 @@ export const COUNTRIES: CountryInfo[] = [
   { oval: 'GB', code: 'GB', nameDe: 'Großbritannien' },
   { oval: 'UZ', code: 'UZ', nameDe: 'Usbekistan' },
 
+  // New additions: Nigeria, Israel, Libanon, Südkorea, Kasachstan, Iran, Singapur
+  { oval: 'NGR', code: 'NG', nameDe: 'Nigeria' },
+  { oval: 'IL', code: 'IL', nameDe: 'Israel' },
+  { oval: 'RL', code: 'LB', nameDe: 'Libanon' },
+  { oval: 'ROK', code: 'KR', nameDe: 'Südkorea' },
+  { oval: 'KZ', code: 'KZ', nameDe: 'Kasachstan' },
+  { oval: 'IR', code: 'IR', nameDe: 'Iran' },
+  { oval: 'SGP', code: 'SG', nameDe: 'Singapur' },
+
   // Other European / neighbouring countries
   { oval: 'AL', code: 'AL', nameDe: 'Albanien' },
   { oval: 'EST', code: 'EE', nameDe: 'Estland' },
