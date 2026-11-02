@@ -25,4 +25,37 @@
   .animate-shake {
     animation: shake 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   }
+
+  /* Custom Neon Sky-Blue Glowing Loader */
+  .loader {
+    height: 80px;
+    aspect-ratio: 1;
+    padding: 10px;
+    border-radius: 20px;
+    box-sizing: border-box;
+    position: relative;
+    /* WebKit mask support for Safari & Chromium */
+    -webkit-mask: conic-gradient(#000 0 0) content-box, conic-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    /* Standard mask support */
+    mask: conic-gradient(#000 0 0) content-box exclude, conic-gradient(#000 0 0);
+    mask-composite: exclude;
+    filter: blur(12px);
+  }
+
+  .loader:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    /* Etwas dunkleres, fast schon neon Himmelblau */
+    background: repeating-conic-gradient(#0000 0 5%, #0095ff, #0000 20% 50%);
+    animation: l3 1.5s linear infinite;
+  }
+
+  @keyframes l3 {
+    to {
+      transform: rotate(1turn);
+      rotate: 1turn;
+    }
+  }
 }

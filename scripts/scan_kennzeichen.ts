@@ -58,6 +58,22 @@ const COUNTRY_NAMES: Record<string, string> = {
   KZ: 'Kasachstan',
   IR: 'Iran',
   SGP: 'Singapur',
+  AM: 'Armenien',
+  AND: 'Andorra',
+  AX: 'Åland',
+  AZ: 'Aserbaidschan',
+  DZ: 'Algerien',
+  GBG: 'Guernsey',
+  GBJ: 'Jersey',
+  RUS: 'Russland',
+  FO: 'Färöer',
+  RA: 'Argentinien',
+  AUS: 'Australien',
+  CR: 'Costa Rica',
+  PY: 'Paraguay',
+  NZ: 'Neuseeland',
+  GBA: 'Alderney',
+  BR: 'Brasilien',
 };
 
 const STAGES = ['harder', 'hard', 'easy', 'solution'];
@@ -170,6 +186,22 @@ export function scanDirectories() {
     generatedAt: new Date().toISOString(),
     plates,
   };
+
+  // Generate Netlify _redirects to support direct domain.com/dateiname.jpg access
+  const directRedirects: string[] = [];
+  for (const plate of plates) {
+    for (const stageUrl of Object.values(plate.stages)) {
+      const fileName = path.basename(stageUrl);
+      directRedirects.push(`/${fileName}  ${stageUrl}  200`);
+      if (fileName.endsWith('.JPG')) {
+        directRedirects.push(`/${fileName.replace(/\.JPG$/, '.jpg')}  ${stageUrl}  200`);
+      }
+    }
+  }
+
+  const redirectsContent = `# Direct plate image URLs (domain.com/dateiname.jpg)\n${directRedirects.join('\n')}\n\n# SPA Fallback\n/*    /index.html   200\n`;
+  const redirectsFile = path.join(projectRoot, 'public', '_redirects');
+  fs.writeFileSync(redirectsFile, redirectsContent);
 
   // Write manifest.json to both public and root
   const candidates = [publicDir, rootDir];

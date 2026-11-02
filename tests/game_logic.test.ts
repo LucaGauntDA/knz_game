@@ -133,4 +133,30 @@ assert(new Set(flagsGrid).size === 15, 'Flags list contains zero duplicates');
 const totalGridCells = flagsGrid.length + 1;
 assert(totalGridCells === 16, '4x4 grid has exactly 16 cells (15 flags + 1 question mark emoji)');
 
+console.log('\n--- 6. Testing UK Flag Uniqueness (Zero duplicate UK flags in grid) ---');
+const ukTargetOval = 'UK';
+const ukTargetCountry = COUNTRIES.find((c) => c.oval === ukTargetOval)!;
+const ukAvailableDistractors = COUNTRIES.filter(
+  (c) => c.oval !== ukTargetOval && c.code !== ukTargetCountry.code
+);
+const ukDistractors: string[] = [];
+const usedCodes = new Set<string>([ukTargetCountry.code]);
+for (const d of ukAvailableDistractors) {
+  if (!usedCodes.has(d.code)) {
+    usedCodes.add(d.code);
+    ukDistractors.push(d.oval);
+    if (ukDistractors.length === 14) break;
+  }
+}
+const ukRoundFlags = [ukTargetOval, ...ukDistractors];
+const ukVisualFlagCodes = ukRoundFlags.map((oval) => {
+  const country = COUNTRIES.find((c) => c.oval === oval);
+  return country ? country.code : oval;
+});
+const ukFlagsCount = ukVisualFlagCodes.filter((code) => code === 'GB').length;
+assert(ukFlagsCount === 1, `Exactly 1 UK flag present in grid (found ${ukFlagsCount})`);
+assert(new Set(ukVisualFlagCodes).size === 15, 'All 15 flags in the grid have unique visual flag codes');
+console.log('✅ PASS: Exactly 1 UK flag present in the grid');
+console.log('✅ PASS: All 15 flags in the grid have 100% unique visual flag codes');
+
 console.log('\n🎉 ALL LOGIC AND SPECIFICATION TESTS PASSED!');

@@ -31,7 +31,7 @@ export const LicensePlateDisplay: React.FC<LicensePlateDisplayProps> = ({
   };
 
   return (
-    <div className="w-full h-full flex items-center justify-center select-none overflow-hidden p-0">
+    <div className="w-full h-full flex items-center justify-center select-none p-1 sm:p-2 min-h-0 min-w-0">
       <AnimatePresence mode="wait">
         <motion.div
           key={`${plate.id}_${displayStage}`}
@@ -39,16 +39,16 @@ export const LicensePlateDisplay: React.FC<LicensePlateDisplayProps> = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0.8 }}
           transition={{ duration: 0.15, ease: 'easeOut' }}
-          className="w-full h-full flex items-center justify-center max-w-[880px]"
+          className="w-full h-full flex items-center justify-center max-w-[880px] min-h-0 min-w-0"
         >
-          {/* Großes Kennzeichen-Bild ohne jegliche Ränder */}
+          {/* Großes Kennzeichen-Bild ohne jegliche Ränder, perfekt eingepasst ohne Beschnitt */}
           <img
             src={imgSrc}
             alt="Kennzeichen Rätsel"
             referrerPolicy="no-referrer"
             onLoad={() => setImgLoaded(true)}
             onError={handleImgError}
-            className={`w-full max-h-[46vh] sm:max-h-[50vh] object-contain transition-opacity duration-200 drop-shadow-2xl ${
+            className={`max-w-full max-h-full w-auto h-auto object-contain transition-opacity duration-200 drop-shadow-2xl ${
               imgLoaded ? 'opacity-100' : 'opacity-80'
             }`}
           />

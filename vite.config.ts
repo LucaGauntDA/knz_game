@@ -39,6 +39,39 @@ export default defineConfig(() => {
                 return;
               }
             }
+
+            // Support root image access: domain.com/dateiname.jpg
+            if (req.url) {
+              const urlPath = req.url.split('?')[0];
+              const match = urlPath.match(/^\/([^\/]+?\.(jpe?g|png|webp))$/i);
+              if (match) {
+                const requestedFile = decodeURIComponent(match[1]);
+                const fs = require('fs');
+                const projectRoot = process.cwd();
+                const searchDirs = [
+                  path.resolve(projectRoot, 'public', 'kennzeichen_game'),
+                  path.resolve(projectRoot, 'kennzeichen_game'),
+                ];
+
+                for (const baseDir of searchDirs) {
+                  if (!fs.existsSync(baseDir)) continue;
+                  const subs = fs.readdirSync(baseDir, { withFileTypes: true });
+                  for (const sub of subs) {
+                    if (!sub.isDirectory()) continue;
+                    const folderPath = path.join(baseDir, sub.name);
+                    const files = fs.readdirSync(folderPath);
+                    for (const f of files) {
+                      if (f.toLowerCase() === requestedFile.toLowerCase()) {
+                        const targetPath = path.join(folderPath, f);
+                        res.setHeader('Content-Type', f.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg');
+                        fs.createReadStream(targetPath).pipe(res);
+                        return;
+                      }
+                    }
+                  }
+                }
+              }
+            }
             next();
           });
         },

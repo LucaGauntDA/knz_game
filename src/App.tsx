@@ -8,10 +8,12 @@ import {
   calculateRoundScore,
   loadPlatesManifest,
 } from './data/platesManifest';
-import { COUNTRIES } from './data/countries';
+import { COUNTRIES, COUNTRY_BY_OVAL, CountryInfo } from './data/countries';
 import { LicensePlateDisplay } from './components/LicensePlateDisplay';
 import { FlagGrid } from './components/FlagGrid';
 import { SummaryScreen } from './components/SummaryScreen';
+import { GalleryView } from './components/GalleryView';
+import { CountryDetailView } from './components/CountryDetailView';
 import { soundFx } from './utils/audio';
 
 export type GameMode = 'standard' | 'endless';
@@ -55,13 +57,36 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export default function App() {
-  const [, setAllPlates] = useState<PlateManifestEntry[]>(BUILTIN_PLATES);
+  const [allPlates, setAllPlates] = useState<PlateManifestEntry[]>(BUILTIN_PLATES);
   const [mode, setMode] = useState<GameMode>('standard');
   const [platesQueue, setPlatesQueue] = useState<PlateManifestEntry[]>([]);
   const [currentRoundIndex, setCurrentRoundIndex] = useState<number>(0);
   const [roundState, setRoundState] = useState<RoundState | null>(null);
   const [roundHistory, setRoundHistory] = useState<RoundResult[]>([]);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
+
+  // Hidden routing state driven exclusively via URL
+  const [currentPath, setCurrentPath] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return window.location.pathname;
+    }
+    return '/';
+  });
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentPath(window.location.pathname);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigate = useCallback((path: string) => {
+    if (typeof window !== 'undefined' && window.location.pathname !== path) {
+      window.history.pushState({}, '', path);
+      setCurrentPath(path);
+    }
+  }, []);
 
   const platesRef = useRef<PlateManifestEntry[]>(BUILTIN_PLATES);
   const modeRef = useRef<GameMode>(mode);
@@ -86,8 +111,29 @@ export default function App() {
     // Build 15 flags: 1 correct flag + 14 random non-duplicate distractors
     // The 16th cell (bottom right) is reserved for the ❓ hint emoji
     const correctOval = plate.oval;
-    const availableDistractors = COUNTRIES.filter((c) => c.oval !== correctOval).map((c) => c.oval);
-    const chosenDistractors = shuffleArray(availableDistractors).slice(0, 14);
+    const targetCountry = COUNTRY_BY_OVAL[correctOval];
+    const targetFlagCode = targetCountry ? targetCountry.code : correctOval;
+
+    // Filter available distractors:
+    // 1. Exclude the correct country oval
+    // 2. Exclude any country that has the same visual flag code (e.g. UK / GB)
+    const availableDistractors = COUNTRIES.filter(
+      (c) => c.oval !== correctOval && c.code !== targetFlagCode
+    );
+
+    // Pick 14 distractors ensuring unique visual flags
+    const shuffledDistractors = shuffleArray(availableDistractors);
+    const chosenDistractors: string[] = [];
+    const usedFlagCodes = new Set<string>([targetFlagCode]);
+
+    for (const d of shuffledDistractors) {
+      if (!usedFlagCodes.has(d.code)) {
+        usedFlagCodes.add(d.code);
+        chosenDistractors.push(d.oval);
+        if (chosenDistractors.length === 14) break;
+      }
+    }
+
     const roundFlags = shuffleArray([correctOval, ...chosenDistractors]);
 
     setRoundState({
@@ -377,6 +423,54 @@ export default function App() {
     initGame(nextMode);
   };
 
+  // --- Hidden URL Routing (Accessible only via URL) ---
+  const cleanPath = currentPath.replace(/\/+$/, '') || '/';
+  const lowerPath = cleanPath.toLowerCase();
+
+  // 1. Gallery: domain.com/gallery
+  if (lowerPath === '/gallery') {
+    return (
+      <GalleryView
+        plates={allPlates}
+        onSelectCountry={(oval) => navigate(`/${oval}`)}
+      />
+    );
+  }
+
+  // 2. Direct Image Viewer: domain.com/dateiname.jpg (SPA fallback)
+  const imageMatch = cleanPath.match(/^\/([^\/]+?\.(jpe?g|png|webp))$/i);
+  if (imageMatch) {
+    const filename = imageMatch[1];
+    return (
+      <div className="w-full h-dvh bg-black flex items-center justify-center p-2 select-none">
+        <img
+          src={`/${filename}`}
+          alt={filename}
+          className="max-w-full max-h-full object-contain"
+        />
+      </div>
+    );
+  }
+
+  // 3. Country Detail Page: domain.com/{countrycode}
+  if (cleanPath.length > 1 && cleanPath.startsWith('/')) {
+    const rawCode = cleanPath.slice(1).toUpperCase();
+    const lookupCode = rawCode === 'GB' ? 'UK' : rawCode;
+    const matchedCountry = COUNTRIES.find(
+      (c) => c.oval.toUpperCase() === lookupCode || c.code.toUpperCase() === lookupCode
+    );
+
+    if (matchedCountry) {
+      return (
+        <CountryDetailView
+          country={matchedCountry}
+          plates={allPlates}
+          onBackToGallery={() => navigate('/gallery')}
+        />
+      );
+    }
+  }
+
   return (
     <div className="w-full h-dvh bg-[#0a0c10] text-slate-100 flex flex-col justify-between overflow-hidden antialiased font-sans select-none">
       {/* Keine obere Leiste: Bildschirmhöhe 100% für Kennzeichen & Flaggen */}
@@ -398,7 +492,7 @@ export default function App() {
         ) : roundState ? (
           <div className="w-full h-full flex flex-col items-center justify-between max-w-5xl mx-auto">
             {/* Oberer Bildschirmbereich: Kennzeichen viel größer ohne Ränder */}
-            <div className="w-full flex-1 flex items-center justify-center min-h-[180px] max-h-[50vh] py-1">
+            <div className="w-full flex-1 flex items-center justify-center min-h-0 max-h-[50vh] py-1 min-w-0">
               <LicensePlateDisplay
                 plate={roundState.plate}
                 currentStage={roundState.currentStage}
@@ -423,8 +517,8 @@ export default function App() {
             </div>
           </div>
         ) : (
-          <div className="flex-1 flex items-center justify-center text-slate-500">
-            Lade Kennzeichen...
+          <div className="flex-1 w-full flex items-center justify-center p-6">
+            <div className="loader" role="status" aria-label="Laden..." />
           </div>
         )}
       </main>

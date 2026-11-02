@@ -51,7 +51,6 @@ export const COUNTRIES: CountryInfo[] = [
   { oval: 'UA', code: 'UA', nameDe: 'Ukraine' },
   { oval: 'UAE', code: 'AE', nameDe: 'Ver. Arab. Emirate' },
   { oval: 'UK', code: 'GB', nameDe: 'Großbritannien' },
-  { oval: 'GB', code: 'GB', nameDe: 'Großbritannien' },
   { oval: 'UZ', code: 'UZ', nameDe: 'Usbekistan' },
 
   // New additions: Nigeria, Israel, Libanon, Südkorea, Kasachstan, Iran, Singapur
@@ -62,6 +61,24 @@ export const COUNTRIES: CountryInfo[] = [
   { oval: 'KZ', code: 'KZ', nameDe: 'Kasachstan' },
   { oval: 'IR', code: 'IR', nameDe: 'Iran' },
   { oval: 'SGP', code: 'SG', nameDe: 'Singapur' },
+
+  // New batch: AM, AND, AX, AZ, DZ, GBG, GBJ, RUS, FO, RA, AUS, CR, PY, NZ, GBA & BR
+  { oval: 'AM', code: 'AM', nameDe: 'Armenien' },
+  { oval: 'AND', code: 'AD', nameDe: 'Andorra' },
+  { oval: 'AX', code: 'AX', nameDe: 'Åland' },
+  { oval: 'AZ', code: 'AZ', nameDe: 'Aserbaidschan' },
+  { oval: 'DZ', code: 'DZ', nameDe: 'Algerien' },
+  { oval: 'GBG', code: 'GG', nameDe: 'Guernsey' },
+  { oval: 'GBJ', code: 'JE', nameDe: 'Jersey' },
+  { oval: 'RUS', code: 'RU', nameDe: 'Russland' },
+  { oval: 'FO', code: 'FO', nameDe: 'Färöer' },
+  { oval: 'RA', code: 'AR', nameDe: 'Argentinien' },
+  { oval: 'AUS', code: 'AU', nameDe: 'Australien' },
+  { oval: 'CR', code: 'CR', nameDe: 'Costa Rica' },
+  { oval: 'PY', code: 'PY', nameDe: 'Paraguay' },
+  { oval: 'NZ', code: 'NZ', nameDe: 'Neuseeland' },
+  { oval: 'GBA', code: 'GG', nameDe: 'Alderney' },
+  { oval: 'BR', code: 'BR', nameDe: 'Brasilien' },
 
   // Other European / neighbouring countries
   { oval: 'AL', code: 'AL', nameDe: 'Albanien' },
