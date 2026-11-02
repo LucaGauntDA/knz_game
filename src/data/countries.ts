@@ -2,6 +2,7 @@ export interface CountryInfo {
   oval: string;
   code: string;
   nameDe: string;
+  customFlagUrl?: string;
 }
 
 export const COUNTRIES: CountryInfo[] = [

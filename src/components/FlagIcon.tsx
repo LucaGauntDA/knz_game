@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { COUNTRY_BY_OVAL } from '../data/countries';
 import { AppleEmoji, getFlagEmoji, getFlagEmojiHex } from '../utils/appleEmoji';
 
@@ -9,10 +9,32 @@ interface FlagIconProps {
 
 export { getFlagEmoji, getFlagEmojiHex };
 
+// Mapping for countries/territories without native ISO flag emojis
+export const CUSTOM_FLAGS: Record<string, string> = {
+  GBA: '/flags/GBA.png',
+};
+
 export const FlagIcon: React.FC<FlagIconProps> = ({ oval, className = '' }) => {
+  const [customFailed, setCustomFailed] = useState(false);
   const country = COUNTRY_BY_OVAL[oval.toUpperCase()];
 
   if (!country) return null;
+
+  const customUrl = !customFailed ? (country.customFlagUrl || CUSTOM_FLAGS[oval.toUpperCase()]) : null;
+
+  if (customUrl) {
+    return (
+      <div className={`w-full h-full flex items-center justify-center select-none pointer-events-none ${className}`}>
+        <img
+          src={customUrl}
+          alt={`Flagge ${country.nameDe}`}
+          onError={() => setCustomFailed(true)}
+          className="w-14 h-11 sm:w-18 sm:h-14 md:w-22 md:h-17 lg:w-26 lg:h-20 object-contain drop-shadow-md select-none pointer-events-none"
+          draggable={false}
+        />
+      </div>
+    );
+  }
 
   const emoji = getFlagEmoji(country.code);
   const hex = getFlagEmojiHex(country.code);
