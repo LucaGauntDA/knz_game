@@ -1,93 +1,73 @@
+import fs from 'fs';
+import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
-import {defineConfig} from 'vite';
+import { defineConfig } from 'vite';
 
-export default defineConfig(() => {
+function directPlateImageMiddleware() {
   return {
-    plugins: [
-      react(),
-      tailwindcss(),
-      {
-        name: 'serve-kennzeichen-game-root',
-        configureServer(server) {
-          server.middlewares.use((req, res, next) => {
-            if (req.url && req.url.startsWith('/kennzeichen_game/')) {
-              const fs = require('fs');
-              const relPath = decodeURIComponent(req.url.replace('/kennzeichen_game/', ''));
-              const projectRoot = process.cwd();
-              const rootPath = path.resolve(projectRoot, 'kennzeichen_game', relPath);
-              const publicPath = path.resolve(projectRoot, 'public', 'kennzeichen_game', relPath);
-
-              const targetFile = fs.existsSync(rootPath) ? rootPath : fs.existsSync(publicPath) ? publicPath : null;
-
-              if (req.url === '/kennzeichen_game/manifest.json') {
-                try {
-                  const { scanDirectories } = require('./scripts/scan_kennzeichen');
-                  const manifest = scanDirectories();
-                  res.setHeader('Content-Type', 'application/json');
-                  res.end(JSON.stringify(manifest, null, 2));
-                  return;
-                } catch (e) {
-                  // fallback to static file if error
-                }
-              }
-
-              if (targetFile && fs.statSync(targetFile).isFile()) {
-                res.setHeader('Content-Type', targetFile.endsWith('.json') ? 'application/json' : 'image/jpeg');
-                fs.createReadStream(targetFile).pipe(res);
-                return;
-              }
+    name: 'direct-plate-image-middleware',
+    configureServer(server: any) {
+      server.middlewares.use((req: any, res: any, next: any) => {
+        const reqPath = (req.url || '').split('?')[0];
+        if (!/^\/[^/]+\.(jpe?g|png|webp)$/i.test(reqPath)) {
+          return next();
+        }
+        const filename = reqPath.slice(1);
+        const publicDirect = path.resolve(process.cwd(), 'public', filename);
+        if (fs.existsSync(publicDirect)) {
+          return next();
+        }
+        const gameRoot = path.resolve(process.cwd(), 'public', 'kennzeichen_game');
+        if (fs.existsSync(gameRoot)) {
+          const folders = fs.readdirSync(gameRoot, { withFileTypes: true });
+          for (const folder of folders) {
+            if (!folder.isDirectory()) continue;
+            const folderPath = path.join(gameRoot, folder.name);
+            const candidate = path.join(folderPath, filename);
+            if (fs.existsSync(candidate)) {
+              const ext = path.extname(candidate).toLowerCase();
+              const mime =
+                ext === '.png'
+                  ? 'image/png'
+                  : ext === '.webp'
+                  ? 'image/webp'
+                  : 'image/jpeg';
+              res.setHeader('Content-Type', mime);
+              fs.createReadStream(candidate).pipe(res);
+              return;
             }
-
-            // Support root image access: domain.com/dateiname.jpg
-            if (req.url) {
-              const urlPath = req.url.split('?')[0];
-              const match = urlPath.match(/^\/([^\/]+?\.(jpe?g|png|webp))$/i);
-              if (match) {
-                const requestedFile = decodeURIComponent(match[1]);
-                const fs = require('fs');
-                const projectRoot = process.cwd();
-                const searchDirs = [
-                  path.resolve(projectRoot, 'public', 'kennzeichen_game'),
-                  path.resolve(projectRoot, 'kennzeichen_game'),
-                ];
-
-                for (const baseDir of searchDirs) {
-                  if (!fs.existsSync(baseDir)) continue;
-                  const subs = fs.readdirSync(baseDir, { withFileTypes: true });
-                  for (const sub of subs) {
-                    if (!sub.isDirectory()) continue;
-                    const folderPath = path.join(baseDir, sub.name);
-                    const files = fs.readdirSync(folderPath);
-                    for (const f of files) {
-                      if (f.toLowerCase() === requestedFile.toLowerCase()) {
-                        const targetPath = path.join(folderPath, f);
-                        res.setHeader('Content-Type', f.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg');
-                        fs.createReadStream(targetPath).pipe(res);
-                        return;
-                      }
-                    }
-                  }
-                }
-              }
+            const files = fs.readdirSync(folderPath);
+            const caseMatch = files.find((f) => f.toLowerCase() === filename.toLowerCase());
+            if (caseMatch) {
+              const matchedPath = path.join(folderPath, caseMatch);
+              const ext = path.extname(matchedPath).toLowerCase();
+              const mime =
+                ext === '.png'
+                  ? 'image/png'
+                  : ext === '.webp'
+                  ? 'image/webp'
+                  : 'image/jpeg';
+              res.setHeader('Content-Type', mime);
+              fs.createReadStream(matchedPath).pipe(res);
+              return;
             }
-            next();
-          });
-        },
-      },
-    ],
-    resolve: {
-      alias: {
-        '@': path.resolve(process.cwd(), '.'),
-      },
-    },
-    server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modify—file watching is disabled to prevent flickering during agent edits.
-      hmr: process.env.DISABLE_HMR !== 'true',
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
-      watch: process.env.DISABLE_HMR === 'true' ? null : {},
+          }
+        }
+        return next();
+      });
     },
   };
+}
+
+export default defineConfig({
+  plugins: [react(), tailwindcss(), directPlateImageMiddleware()],
+  resolve: {
+    extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json', '.css'],
+  },
+  server: {
+    port: 3000,
+    host: '0.0.0.0',
+    hmr: false,
+  },
 });

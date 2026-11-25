@@ -4,7 +4,7 @@ import {
   getInitialStage,
   PlateManifestEntry,
 } from '../src/data/platesManifest';
-import { COUNTRIES } from '../src/data/countries';
+import { COUNTRIES, COUNTRY_BY_OVAL } from '../src/data/countries';
 
 function assert(condition: boolean, message: string) {
   if (!condition) {
@@ -28,6 +28,9 @@ assert(calculateRoundScore(4, false) === 1, '4 steps taken -> 1 point');
 // Loss of round always gives 0 points
 assert(calculateRoundScore(0, true) === 0, 'Round lost with 0 steps -> 0 points');
 assert(calculateRoundScore(3, true) === 0, 'Round lost with 3 steps -> 0 points');
+
+// Wrong subdivision guess penalty (each wrong subdivision guess deducts 1 point)
+assert(calculateRoundScore(0 + 2, false) === 3, '2 wrong subdivision guesses -> 3 points');
 
 console.log('\n--- 2. Testing Missing Stage Skipping ---');
 // Normal plate with all stages
@@ -158,5 +161,100 @@ assert(ukFlagsCount === 1, `Exactly 1 UK flag present in grid (found ${ukFlagsCo
 assert(new Set(ukVisualFlagCodes).size === 15, 'All 15 flags in the grid have unique visual flag codes');
 console.log('✅ PASS: Exactly 1 UK flag present in the grid');
 console.log('✅ PASS: All 15 flags in the grid have 100% unique visual flag codes');
+
+console.log('\n--- 7. Testing North American & Australian Subdivisions ---');
+import { getSubdivisionForPlate, generateSubdivisionOptions, getSurroundingCellIndices, COUNTRY_SUBDIVISIONS } from '../src/data/subdivisions';
+
+// USA mappings
+assert(getSubdivisionForPlate('USA', 1)?.nameDe === 'Alaska', 'USA 1 maps to Alaska');
+assert(getSubdivisionForPlate('USA', 1)?.code === 'AK', 'USA 1 has code AK');
+assert(getSubdivisionForPlate('USA', 2)?.nameDe === 'Kalifornien', 'USA 2 maps to Kalifornien (CA)');
+assert(getSubdivisionForPlate('USA', 3)?.nameDe === 'Florida', 'USA 3 maps to Florida (FL)');
+assert(getSubdivisionForPlate('USA', 4)?.nameDe === 'Hawaii', 'USA 4 maps to Hawaii (HI)');
+assert(getSubdivisionForPlate('USA', 11) === null, 'USA unmapped number returns null');
+
+// Canada mappings
+assert(getSubdivisionForPlate('CDN', 1)?.nameDe === 'Ontario', 'CDN 1 maps to Ontario (ON)');
+assert(getSubdivisionForPlate('CDN', 2)?.nameDe === 'Québec', 'CDN 2 maps to Québec (QC)');
+assert(getSubdivisionForPlate('CDN', 3)?.nameDe === 'Northwest Territories', 'CDN 3 maps to Northwest Territories (NT)');
+
+// Australia mappings
+assert(getSubdivisionForPlate('AUS', 1)?.nameDe === 'Queensland', 'AUS 1 maps to Queensland (QLD)');
+assert(getSubdivisionForPlate('AUS', 2)?.nameDe === 'New South Wales', 'AUS 2 maps to New South Wales (NSW)');
+assert(getSubdivisionForPlate('AUS', 3)?.nameDe === 'Australian Capital Territory', 'AUS 3 maps to ACT');
+assert(getSubdivisionForPlate('AUS', 4)?.nameDe === 'Victoria', 'AUS 4 maps to Victoria (VIC)');
+
+// Mexico mappings
+assert(getSubdivisionForPlate('MEX', 1)?.nameDe === 'Morelos', 'MEX 1 maps to Morelos (MOR)');
+assert(getSubdivisionForPlate('MEX', 2)?.nameDe === 'Campeche', 'MEX 2 maps to Campeche (CAM)');
+assert(getSubdivisionForPlate('MEX', 3)?.nameDe === 'Oaxaca', 'MEX 3 maps to Oaxaca (OAX)');
+assert(getSubdivisionForPlate('MEX', 4)?.nameDe === 'Sonora', 'MEX 4 maps to Sonora (SON)');
+
+// Standard country without subdivision
+assert(getSubdivisionForPlate('D', 1) === null, 'Germany (D) returns null for subdivisions');
+assert(getSubdivisionForPlate('F', 1) === null, 'France (F) returns null for subdivisions');
+
+// Surrounding cells generator
+const targetSub = getSubdivisionForPlate('USA', 1)!;
+for (let cellIdx = 0; cellIdx < 15; cellIdx++) {
+  const options = generateSubdivisionOptions('USA', targetSub, cellIdx);
+  assert(options.length >= 4, `At least 4 surrounding options generated for cell ${cellIdx}`);
+  const codes = options.map((o) => o.subdivision.code);
+  assert(codes.includes('AK'), `Options for cell ${cellIdx} include target AK`);
+  assert(new Set(codes).size === codes.length, `Options for cell ${cellIdx} contain no duplicates`);
+  // Must not overwrite country flag cell or hint cell 15
+  options.forEach((o) => {
+    assert(o.cellIndex !== cellIdx, 'Option does not overwrite country flag cell');
+    assert(o.cellIndex !== 15, 'Option does not overwrite hint cell 15');
+  });
+}
+console.log('✅ PASS: All USA, Canada, and Australia subdivision mappings verified');
+console.log('✅ PASS: Surrounding subdivision options generated without collision or duplicates');
+
+// 8. Newly added countries test
+console.log('\n--- Test Suite 8: Newly Added Countries & Flags ---');
+const newCountries = [
+  { oval: 'EG', code: 'EG', name: 'Ägypten' },
+  { oval: 'IRQ', code: 'IQ', name: 'Irak' },
+  { oval: 'KG', code: 'KG', name: 'Kirgisistan' },
+  { oval: 'IND', code: 'IN', name: 'Indien' },
+  { oval: 'MGL', code: 'MN', name: 'Mongolei' },
+  { oval: 'Q', code: 'QA', name: 'Katar' },
+  { oval: 'KSA', code: 'SA', name: 'Saudi-Arabien' },
+  { oval: 'TJ', code: 'TJ', name: 'Tadschikistan' },
+  { oval: 'TM', code: 'TM', name: 'Turkmenistan' },
+  { oval: 'RI', code: 'ID', name: 'Indonesien' },
+  { oval: 'VN', code: 'VN', name: 'Vietnam' },
+  { oval: 'BS', code: 'BS', name: 'Bahamas' },
+  { oval: 'BRN', code: 'BH', name: 'Bahrain' },
+  { oval: 'BD', code: 'BD', name: 'Bangladesch' },
+  { oval: 'KN', code: 'GL', name: 'Grönland' },
+  { oval: 'K', code: 'KH', name: 'Kambodscha' },
+  { oval: 'US-GU', code: 'GU', name: 'Guam' },
+  { oval: 'US-MP', code: 'MP', name: 'Nördliche Marianen' },
+  { oval: 'WB', code: 'PS', name: 'Westjordanland' },
+  { oval: 'US-PR', code: 'PR', name: 'Puerto Rico' },
+  { oval: 'SY', code: 'SC', name: 'Seychellen' },
+  { oval: 'T', code: 'TH', name: 'Thailand' },
+  { oval: 'WAG', code: 'GM', name: 'Gambia' },
+  { oval: 'HK', code: 'HK', name: 'Hongkong' },
+  { oval: 'JOR', code: 'JO', name: 'Jordanien' },
+  { oval: 'EAK', code: 'KE', name: 'Kenia' },
+  { oval: 'KWT', code: 'KW', name: 'Kuwait' },
+  { oval: 'LAO', code: 'LA', name: 'Laos' },
+  { oval: 'MAL', code: 'MY', name: 'Malaysia' },
+  { oval: 'RCH', code: 'CL', name: 'Chile' },
+  { oval: 'ANG', code: 'AO', name: 'Angola' },
+  { oval: 'MV', code: 'MV', name: 'Malediven' },
+  { oval: 'MS', code: 'MU', name: 'Mauritius' },
+];
+
+for (const item of newCountries) {
+  const c = COUNTRY_BY_OVAL[item.oval];
+  assert(Boolean(c), `Country ${item.oval} exists in COUNTRY_BY_OVAL`);
+  assert(c.code === item.code, `Country ${item.oval} has code ${item.code}`);
+  assert(c.nameDe === item.name, `Country ${item.oval} has name ${item.name}`);
+}
+console.log('✅ PASS: All 33 newly added countries configured with valid codes and names');
 
 console.log('\n🎉 ALL LOGIC AND SPECIFICATION TESTS PASSED!');

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { CountryInfo } from '../data/countries';
 import { PlateManifestEntry } from '../data/platesManifest';
+import { getSubdivisionForPlate } from '../data/subdivisions';
 import { FlagIcon } from './FlagIcon';
 import { ArrowLeft } from 'lucide-react';
 
@@ -11,7 +12,7 @@ interface CountryDetailViewProps {
   onBackToGallery: () => void;
 }
 
-const STAGE_ORDER = ['harder', 'hard', 'easy', 'solution'] as const;
+const STAGE_ORDER = ['evenharder', 'harder', 'hard', 'easy', 'solution'] as const;
 
 export const CountryDetailView: React.FC<CountryDetailViewProps> = ({
   country,
@@ -42,6 +43,7 @@ export const CountryDetailView: React.FC<CountryDetailViewProps> = ({
 
   // Helper to get display stage name ("harder" -> "very hard")
   const getStageLabel = (stageKey: string): string => {
+    if (stageKey.toLowerCase() === 'evenharder') return 'extreme hard';
     if (stageKey.toLowerCase() === 'harder') return 'very hard';
     return stageKey.toLowerCase();
   };
@@ -101,11 +103,28 @@ export const CountryDetailView: React.FC<CountryDetailViewProps> = ({
                 // Collect existing stages in STAGE_ORDER: harder -> hard -> easy -> solution
                 const availableStages = STAGE_ORDER.filter((s) => Boolean(plate.stages[s]));
 
+                const subdivision = getSubdivisionForPlate(plate.oval, plate.number);
+
                 return (
                   <div
                     key={`${plate.oval}_${plate.number}`}
-                    className="w-full flex flex-col items-center gap-8 sm:gap-10"
+                    className="w-full flex flex-col items-center gap-6 sm:gap-8"
                   >
+                    {subdivision && (
+                      <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.08] border border-white/15 text-xs font-mono text-sky-300 shadow-sm">
+                        <img
+                          src={subdivision.flagUrl || `/flags/subdivisions/${subdivision.code}.png`}
+                          alt={subdivision.nameDe}
+                          decoding="async"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = '/flags/no_flag_yet.jpeg';
+                          }}
+                          className="w-5 h-3.5 object-cover rounded-sm shadow-sm"
+                        />
+                        <span className="font-semibold text-white">{subdivision.nameDe}</span>
+                        <span className="text-sky-400 font-bold">({subdivision.code})</span>
+                      </div>
+                    )}
                     {availableStages.map((stageKey) => {
                       const stageUrl = plate.stages[stageKey]!;
                       const filenameWithoutExt = getFilenameWithoutExt(stageUrl);

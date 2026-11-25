@@ -12,6 +12,8 @@ export { getFlagEmoji, getFlagEmojiHex };
 // Mapping for countries/territories without native ISO flag emojis
 export const CUSTOM_FLAGS: Record<string, string> = {
   GBA: '/flags/GBA.png',
+  PMR: '/flags/PMR.png',
+  TRNC: '/flags/TRNC.png',
 };
 
 export const FlagIcon: React.FC<FlagIconProps> = ({ oval, className = '' }) => {

@@ -58,4 +58,39 @@
       rotate: 1turn;
     }
   }
+
+  @keyframes div-01-drift {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .div-01__wave {
+    position: absolute;
+    inset: auto 0 -1px;
+    height: clamp(64px, 9vw, 132px);
+    line-height: 0;
+    pointer-events: none;
+    color: #0d1117;
+  }
+
+  .div-01__wave svg {
+    width: 200%;
+    height: 100%;
+    display: block;
+    fill: currentColor;
+  }
+
+  .div-01__wave--back {
+    opacity: 0.42;
+    height: clamp(78px, 11vw, 158px);
+  }
+
+  .div-01__wave--back svg {
+    animation: div-01-drift 21s linear infinite;
+  }
+
+  .div-01__wave--front svg {
+    animation: div-01-drift 13s linear infinite;
+  }
 }

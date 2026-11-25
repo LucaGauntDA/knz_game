@@ -1,6 +1,7 @@
 import { PlateManifestEntry, PlateStage } from '../data/platesManifest';
+import { Subdivision } from '../data/subdivisions';
 
-export type GameMode = 'standard' | 'endless';
+export type GameMode = 'standard' | 'endless' | 'flags';
 
 export interface RoundResult {
   roundNumber: number;
@@ -14,6 +15,13 @@ export interface RoundResult {
   wrongGuessesCount: number;
   finalStage: PlateStage;
   firstAttemptSuccess: boolean;
+  subdivisionName?: string;
+  subdivisionCode?: string;
+}
+
+export interface SubdivisionCellOption {
+  cellIndex: number; // 0..14 in the 4x4 grid
+  subdivision: Subdivision;
 }
 
 export interface RoundState {
@@ -29,4 +37,12 @@ export interface RoundState {
   resolutionStatus: 'playing' | 'won' | 'lost';
   selectedWinningOval: string | null;
   displayFlags: string[]; // 16 oval codes in randomized order
+
+  // Sub-entity (State/Territory) phase support
+  targetSubdivision?: Subdivision | null;
+  phase: 'country' | 'subdivision';
+  correctCountryIndex?: number;
+  subdivisionOptions?: SubdivisionCellOption[];
+  wrongSubdivisionGuesses: string[];
+  selectedWinningSubdivisionCode?: string | null;
 }

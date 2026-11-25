@@ -1,8 +1,8 @@
 import { COUNTRY_BY_OVAL } from './countries';
 
-export type PlateStage = 'harder' | 'hard' | 'easy' | 'solution';
+export type PlateStage = 'evenharder' | 'harder' | 'hard' | 'easy' | 'solution';
 
-export const STAGES_ORDER_DESC: PlateStage[] = ['harder', 'hard', 'easy', 'solution'];
+export const STAGES_ORDER_DESC: PlateStage[] = ['evenharder', 'harder', 'hard', 'easy', 'solution'];
 
 export interface PlateManifestEntry {
   id: string; // e.g. "RKS1"
@@ -132,6 +132,22 @@ export function getNextEasierStage(
 export function calculateRoundScore(stepsTaken: number, isLost: boolean): number {
   if (isLost) return 0;
   return Math.max(1, 5 - stepsTaken);
+}
+
+/**
+ * Weighted shuffle function using Efraimidis-Spirakis weighted random sampling / sorting algorithm.
+ * Items with lower weight get lower sort keys on average, reducing their chance of appearing
+ * near the top of the queue.
+ */
+export function weightedShuffle<T>(items: T[], getWeight: (item: T) => number): T[] {
+  const scored = items.map((item) => {
+    const w = Math.max(0.001, getWeight(item));
+    const u = Math.random();
+    const key = Math.pow(u, 1 / w);
+    return { item, key };
+  });
+  scored.sort((a, b) => b.key - a.key);
+  return scored.map((s) => s.item);
 }
 
 /**
