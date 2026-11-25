@@ -164,7 +164,7 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ plates, onSelectCountr
                 </button>
               </div>
               <p className="text-sm text-slate-300 leading-relaxed mb-6">
-                Hier steht demnächst deine genaue Beschreibung oder Anleitung dazu, wie du deine Custom Flags erstellst und generierst. (Platzhalter-Text)
+                For transparency: At the beginning I just gave ChatGPT (with Images 2.5) the flags and this worked surprisingly well. You can recognize the first few flags from ChatGPT as they’re bigger then the rest. For these I built a mini app with Wabi, hence I didn’t want to pay or wait for the limit to reset. The Wabi app works with putting the plain image from Google into a placeholder manually. You can recognize these manually created flags by its smaller size. 
               </p>
               <div className="flex justify-end">
                 <button
@@ -172,7 +172,7 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ plates, onSelectCountr
                   onClick={() => setShowInfoModal(false)}
                   className="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-semibold transition-all cursor-pointer shadow"
                 >
-                  Verstanden
+                  Got it!
                 </button>
               </div>
             </motion.div>
